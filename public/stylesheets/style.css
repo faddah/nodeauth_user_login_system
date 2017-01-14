@@ -1,8 +1,19 @@
 body {
-  padding: 50px;
+  /* padding: 50px;  */
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
+}
+
+form {
+  width: 65%;
+}
+
+input.form-control::after {
+  content: "*";
+  color: pink;
+  font-size: 10px;
+  font-style: italic;
 }

@@ -1,9 +1,57 @@
 var express = require('express');
 var router = express.Router();
+var multer = require('multer');
+var upload = multer({dest: './uploads'});
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
+});
+
+router.get('/register', function(req, res, next) {
+  res.render('register', { title: 'Register' });
+});
+
+router.get('/login', function(req, res, next) {
+  res.render('login', { title: 'Login' });
+});
+
+router.post('/register', upload.single('profileImg'), function(req, res, next) {
+  // console.log(req.body.name);
+  var name = req.body.name;
+  var email = req.body.email;
+  var username = req.body.username;
+  var password = req.body.password;
+  var password2 = req.body.password2;
+
+  if(req.file){
+    console.log('Uploading Image File...\n');
+    console.log(req.file);
+    var profileImg = req.file.filename;
+  } else {
+    console.log('No File Uploaded...');
+    var profileImg = 'no-image.jpg';
+  }
+
+  // Form Validator
+  req.checkBody('name','Name field is required').notEmpty();
+  req.checkBody('email','Email field is required').notEmpty();
+  req.checkBody('email','Email is not valide').isEmail();
+  req.checkBody('username','User Name field is required').notEmpty();
+  req.checkBody('password','Password field is required').notEmpty();
+  req.checkBody('password2','Both Passwords entered do not match').equals(req.body.password);
+
+  // Check for Errors
+  var mistakesWereMade = req.validationErrors();
+
+  if(mistakesWereMade) {
+    console.log("Let's face it: Mistakes were made.");
+    res.render('register', {
+      errors: mistakesWereMade
+    });
+  } else {
+    console.log("No mistakes made — perfect!");
+  }
 });
 
 module.exports = router;
