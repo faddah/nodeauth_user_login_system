@@ -1,7 +1,10 @@
+/* eslint-env node */
 var express = require('express');
 var router = express.Router();
 var multer = require('multer');
 var upload = multer({dest: './uploads'});
+
+var User = require('../models/user');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -27,7 +30,7 @@ router.post('/register', upload.single('profileImg'), function(req, res, next) {
   if(req.file){
     console.log('Uploading Image File...\n');
     console.log(req.file);
-    var profileImg = req.file.filename;
+    var profileImg = req.file.originalname;
   } else {
     console.log('No File Uploaded...');
     var profileImg = 'no-image.jpg';
@@ -51,6 +54,23 @@ router.post('/register', upload.single('profileImg'), function(req, res, next) {
     });
   } else {
     console.log("No mistakes made — perfect!");
+    var newUser = new User({
+        name: name,
+        email: email,
+        username: username,
+        password: password,
+        profileImg: profileImg
+    });
+    
+    User.createUser(newUser, function(err, user) {
+        if(err) throw err;
+        console.log(user);
+    });
+    
+    req.flash('success', 'You are now registered — please Login through the Login link above 👆🏽.');
+    
+    res.location('/');
+    res.redirect('/');
   }
 });
 

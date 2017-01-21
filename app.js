@@ -1,3 +1,4 @@
+/*eslint-env node */
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -11,9 +12,12 @@ var expressValidator = require('express-validator');
 var multer = require('multer');
 var upload = multer({dest: './uploads'});
 var flash = require('connect-flash');
+var bcrypt = require('bcryptjs');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
 var db = mongoose.connection;
+var fs = require('fs');
+var favicon = require('serve-favicon');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -23,6 +27,7 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+app.use(favicon(__dirname + '/public/assets/favicon.ico'));
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
