@@ -1,4 +1,4 @@
-/* eslint-env node */
+ /* eslint-env node */
 var express = require('express');
 var router = express.Router();
 var multer = require('multer');
@@ -19,6 +19,7 @@ router.get('/login', function(req, res, next) {
   res.render('login', { title: 'Login' });
 });
 
+/* POST to handle user registration info, including pic, w/ multer & upload */
 router.post('/register', upload.single('profileImg'), function(req, res, next) {
   // console.log(req.body.name);
   var name = req.body.name;
@@ -26,6 +27,7 @@ router.post('/register', upload.single('profileImg'), function(req, res, next) {
   var username = req.body.username;
   var password = req.body.password;
   var password2 = req.body.password2;
+  console.log(req.file);
 
   if(req.file){
     console.log('Uploading Image File...\n');
@@ -63,11 +65,15 @@ router.post('/register', upload.single('profileImg'), function(req, res, next) {
     });
     
     User.createUser(newUser, function(err, user) {
-        if(err) throw err;
-        console.log(user);
+        if(err) {
+            throw err;
+            console.log('Could not create user in Database, Mistakes were made: ' + err);
+        } else {
+            console.log("User creatd in Database: " + user.username);   
+        }
     });
     
-    req.flash('success', 'You are now registered — please Login through the Login link above 👆🏽.');
+    req.flash('success', 'Congrats, you are now registered — please Login through the Login link above 👆🏽.');
     
     res.location('/');
     res.redirect('/');

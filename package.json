@@ -16,13 +16,13 @@
     "express-session": "^1.14.2",
     "express-validator": "*",
     "jade": "~1.11.0",
+    "serve-favicon": "~2.3.0",
     "mongodb": "*",
     "mongoose": "*",
     "morgan": "~1.7.0",
     "multer": "*",
     "passport": "*",
     "passport-http": "*",
-    "passport-local": "*",
-    "serve-favicon": "~2.3.0"
+    "passport-local": "*"
   }
 }
