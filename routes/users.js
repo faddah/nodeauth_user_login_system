@@ -1,23 +1,60 @@
- /* eslint-env node */
+/* eslint-env node */
 var express = require('express');
 var router = express.Router();
 var multer = require('multer');
 var upload = multer({dest: './uploads'});
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var flash = require('connect-flash');
 
 var User = require('../models/user');
 
-/* GET users listing. */
+/* GET request routing: home page. */
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
-
+/* GET request routing: registration page. */
 router.get('/register', function(req, res, next) {
   res.render('register', { title: 'Register' });
 });
-
+/* GET request routing: login page. */
 router.get('/login', function(req, res, next) {
   res.render('login', { title: 'Login' });
 });
+/* POST request routing: respond login page. */
+router.post('/login',
+  passport.authenticate('local',{failureRedirect:'/users/login', failureFlash:'We\'re sorry, but the user name and/or password you attempted is invalid.'}),
+  function(req, res) {
+    req.flash('success','You are now logged in, proceed at your own caution.');
+    res.redirect('/');
+});
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.getUserById(id, function(err, user) {
+    done(err, user);
+  });
+});
+
+passport.use(new LocalStrategy(function(username, password, done){
+    User.getUserByUsername(username, function(err, user){
+        if(err) throw err;
+        if(!user) {
+            return done(null, false, {message: 'User not found in database.'})
+        }
+    });
+    User.comparePassword(password, user.password, function(err, isMatch){
+        if(err) return done(err);
+        if(isMatch){
+            return done(null, user);
+        } else {
+            return done(null, false, {message: 'Invalid Password.'});
+        }
+    });
+}));
 
 /* POST to handle user registration info, including pic, w/ multer & upload */
 router.post('/register', upload.single('profileImg'), function(req, res, next) {

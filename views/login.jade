@@ -3,7 +3,7 @@ extends layout
 block content
   h2.page-header Log-in
   p Please Log-in below.
-  form(action="post", method="/users/register", enctype="multipart/form-data")
+  form(action="post", method="/users/login")
     .form-group
       label User Name
       input.form-control(name='username', type='text', placeholder='Enter your User Name, please.')

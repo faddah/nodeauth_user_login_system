@@ -39,3 +39,14 @@ form {
     background-color: #f2dede;
     border-color: #ebccd1;
 }
+
+ul.nav.navbar-nav > li {
+    border-top: 2px solid black;
+    border-top-left-radius: 25%;
+    border-top-right-radius: 25%;
+}
+
+ul.nav.navbar-nav > li.active {
+    border-top-left-radius: 25%;
+    border-top-right-radius: 25%;
+}
