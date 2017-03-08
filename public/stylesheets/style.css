@@ -42,8 +42,9 @@ form {
 
 ul.nav.navbar-nav > li {
     border-top: 2px solid black;
-    border-top-left-radius: 25%;
-    border-top-right-radius: 25%;
+    border-right: 1px solid darkgrey;
+    border-top-left-radius: 35%;
+    border-top-right-radius: 35%;
 }
 
 ul.nav.navbar-nav > li.active {

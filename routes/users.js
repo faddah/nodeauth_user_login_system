@@ -45,7 +45,6 @@ passport.use(new LocalStrategy(function(username, password, done){
         if(!user) {
             return done(null, false, {message: 'User not found in database.'})
         }
-    });
     User.comparePassword(password, user.password, function(err, isMatch){
         if(err) return done(err);
         if(isMatch){
@@ -53,6 +52,7 @@ passport.use(new LocalStrategy(function(username, password, done){
         } else {
             return done(null, false, {message: 'Invalid Password.'});
         }
+    });
     });
 }));
 
